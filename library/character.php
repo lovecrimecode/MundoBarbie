@@ -39,4 +39,13 @@ class Character
                $this->id = $this->generateCharacterId();
           }
      }
+
+     public function age()
+     {
+          if (!$this->birthday) return null;
+
+          $birth_date = new DateTime($this->birthday);
+          $today = new DateTime();
+          return $today->diff($birth_date)->y;
+     }
 }

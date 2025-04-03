@@ -1,5 +1,5 @@
 <?php
-require 'template/template.php';
+require 'library/template/template.php';
 Template::applyTemplate();
 ?>
 
