@@ -26,4 +26,26 @@ class Character
 
           return $max_id + 1; //retorna el siguiente id disponible
      }
+
+     public function __construct($data = null)
+     {
+          if ($data) {
+               $this->id = $data->id;
+               $this->name = $data->name ?? "";
+               $this->birthday = $data->birthday ?? "";
+               $this->profession = $data->profession ?? "";
+
+          } else {
+               $this->id = $this->generateCharacterId();
+          }
+     }
+
+     public function age()
+     {
+          if (!$this->birthday) return null;
+
+          $birth_date = new DateTime($this->birthday);
+          $today = new DateTime();
+          return $today->diff($birth_date)->y;
+     }
 }
