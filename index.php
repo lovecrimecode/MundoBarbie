@@ -1,5 +1,6 @@
 <?php
 require 'library/template/template.php';
+require 'library/components.php';
 Template::applyTemplate();
 ?>
 
@@ -15,17 +16,27 @@ Template::applyTemplate();
           <tr>
                <th>ID</th>
                <th>Nombre</th>
-               <th>Edad</th>
+               <th>Fecha de Nacimiento</th>
                <th>Profesion</th>
                <th>Acciones</th>
           </tr>
      </thead>
      <tbody>
           <?php
-          // lista de personajes
-
-          // Boton para editar
+          $data = listCharacters();
+          if (empty($data)) {
+               echo "<tr><td colspan='5'>No hay personajes registrados.</td></tr>";
+          } else {
+               foreach ($data as $character) {
+                    echo "<tr>";
+                    echo "<td>" . $character['id'] . "</td>";
+                    echo "<td>" . $character['name'] . "</td>";
+                    echo "<td>" . $character['birthday'] . "</td>";
+                    echo "<td>" . $character['profession'] . "</td>";
+                    echo "<td><a href='register.php?id=" . $character['id'] . "' class='button'>Editar</a></td>";
+                    echo "</tr>";
+               }
+          }
           ?>
-          <a href="register.php?id=" <?= $character->id ?>" class="button">Editar</a>
      </tbody>
 </table>
