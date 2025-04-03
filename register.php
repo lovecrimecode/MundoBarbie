@@ -14,7 +14,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit;
     }
 
-    $character->id = $_POST['id'] ?? ''();
+    $character->id = $_POST['id'] ?? '';
     $character->name = $name;
     $character->birthday = $birthday;
     $character->profession = $profession;
