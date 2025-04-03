@@ -4,6 +4,21 @@ Template::applyTemplate();
 
 $character = new Character();
 
+// Cargar los datos del personaje si se está editando
+if (isset($_GET['id'])) {
+    $character->id = $_GET['id'];
+    $files = glob('data/*.json');
+    foreach ($files as $file) {
+        $content = json_decode(file_get_contents($file), true);
+        if ($content['id'] == $character->id) {
+            $character->name = $content['name'];
+            $character->birthday = $content['birthday'];
+            $character->profession = $content['profession'];
+            break;
+        }
+    }
+}
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $name = htmlspecialchars($_POST['name']);
     $birthday = htmlspecialchars($_POST['birthday']);
@@ -19,11 +34,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $character->birthday = $birthday;
     $character->profession = $profession;
 
-    // Guardar el personaje
-    if (storeCharacter($character->id, $character)) {
-        header("Location: index.php?success=1");
+    // Guardar o editar el personaje
+    if (isset($_GET['id'])) {
+        if (updateCharacter($character->id, $character)) {
+            header("Location: index.php?success=1");
+        } else {
+            header("Location: index.php?error=2");
+        }
     } else {
-        header("Location: index.php?error=2");
+        if (storeCharacter($character->id, $character)) {
+            header("Location: index.php?success=1");
+        } else {
+            header("Location: index.php?error=2");
+        }
     }
     exit;
 }
@@ -34,7 +57,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <h1 class='text-border'>Registro de Personajes</h1>
     <h3>Por favor ingrese los datos del personaje</h3>
 
-    <form action="index.php" method="POST">
+    <form action="register.php<?= isset($_GET['id']) ? '?id=' . $_GET['id'] : '' ?>" method="POST">
         <input type="hidden" name="id" value="<?= $character->id ?? '' ?>">
 
         <label for="name">Nombre:</label>
@@ -77,4 +100,14 @@ function storeCharacter($id, $data)
 
     $file = DATA_FOLDER . "{$id}.json"; // Archivo json con los datos del personaje segun id
     return file_put_contents($file, json_encode($data, JSON_PRETTY_PRINT)) !== false;
+}
+
+function updateCharacter($id, $data)
+{
+    $file = DATA_FOLDER . "{$id}.json";
+    if (file_exists($file)) {
+        return file_put_contents($file, json_encode($data, JSON_PRETTY_PRINT)) !== false;
+    } else {
+        return false;
+    }
 }

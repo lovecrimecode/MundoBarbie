@@ -23,6 +23,9 @@ Template::applyTemplate();
      <tbody>
           <?php
           // lista de personajes
+
+          // Boton para editar
           ?>
+          <a href="register.php?id=" <?= $character->id ?>" class="button">Editar</a>
      </tbody>
 </table>
