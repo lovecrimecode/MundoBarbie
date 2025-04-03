@@ -57,3 +57,16 @@ function listCharacters()
 
      return empty($characters) ? null : $characters;
 }
+
+function deleteCharacter($id)
+{
+     $file = DATA_FOLDER . "{$id}.json";
+     if (file_exists($file)) {
+          if (!unlink($file)) {
+               throw new RuntimeException("Error al eliminar el archivo de personaje.");
+          }
+          return true;
+     } else {
+          return false;
+     }
+}

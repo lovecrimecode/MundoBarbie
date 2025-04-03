@@ -2,6 +2,21 @@
 require 'library/template/template.php';
 require 'library/components.php';
 Template::applyTemplate();
+
+if (isset($_GET['delete'])) {
+     $id = $_GET['delete'];
+     $file = DATA_FOLDER . "{$id}.json";
+     if (file_exists($file)) {
+          if (unlink($file)) {
+               header("Location: index.php?success=1");
+          } else {
+               header("Location: index.php?error=1");
+          }
+     } else {
+          header("Location: index.php?error=2");
+     }
+     exit;
+}
 ?>
 
 <h1 class="text-border">Bienvenidx al mundo Barbie</h1>
@@ -33,10 +48,23 @@ Template::applyTemplate();
                     echo "<td>" . $character['name'] . "</td>";
                     echo "<td>" . $character['birthday'] . "</td>";
                     echo "<td>" . $character['profession'] . "</td>";
-                    echo "<td><a href='register.php?id=" . $character['id'] . "' class='button'>Editar</a></td>";
+                    echo "<td>
+                              <a href='register.php?id=" . $character['id'] . "' class='button'>Editar</a>
+                              <a href='index.php?delete=" . $character['id'] . "' class='button'>Eliminar</a>
+                          </td>";
                     echo "</tr>";
                }
           }
           ?>
      </tbody>
 </table>
+
+<?php if (isset($_GET['success'])): ?>
+     <script>
+          alert("Personaje eliminado correctamente!");
+     </script>
+<?php elseif (isset($_GET['error'])): ?>
+     <script>
+          alert("Error al eliminar el personaje. Por favor intente de nuevo.");
+     </script>
+<?php endif; ?>
