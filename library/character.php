@@ -4,9 +4,8 @@ class Character
 {
      public $id;
      public $name;
-     public $last_name;
      public $birthday;
-     public $profession; 
+     public $profession;
 
      public function generateCharacterId()
      {
