@@ -1,6 +1,8 @@
 <?php
+ob_start();
 require 'library/template/template.php';
 require 'library/components.php';
+require 'library/character.php';
 Template::applyTemplate();
 
 $character = new Character();
@@ -38,14 +40,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Guardar o editar el personaje
     if (isset($_GET['id'])) {
         if (updateCharacter($character->id, $character)) {
-            header("Location: index.php?success=1");
+            ob_end_clean();
+            header("Location: index.php?saveSuccess=1");
         } else {
+            ob_end_clean();
             header("Location: index.php?error=2");
         }
     } else {
         if (storeCharacter($character->id, $character)) {
-            header("Location: index.php?success=1");
+            ob_end_clean();
+            header("Location: index.php?saveSuccess=1");
         } else {
+            ob_end_clean();
             header("Location: index.php?error=2");
         }
     }
@@ -57,20 +63,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <div class='container'>
     <h1 class='text-border'>Registro de Personajes</h1>
     <h3>Por favor ingrese los datos del personaje</h3>
+    <br>
 
     <form action="register.php<?= isset($_GET['id']) ? '?id=' . $_GET['id'] : '' ?>" method="POST">
         <input type="hidden" name="id" value="<?= $character->id ?? '' ?>">
 
         <label for="name">Nombre:</label>
         <input type="text" name="name" id="name" required value="<?= $character->name ?? '' ?>" placeholder="Nombre del personaje" />
-
+        <br>
         <label for="birthday">Fecha de nacimiento:</label>
         <input type="date" name="birthday" id="birthday" required value="<?= $character->birthday ?? '' ?>" placeholder="Fecha de nacimiento del personaje" />
-
+        <br>
         <label for="profession">Profesion:</label>
         <input type="text" name="profession" id="profession" required value="<?= $character->profession ?? '' ?>" placeholder="Profesion del personaje" />
 
-        <br><button type="submit" class="button">Guardar personaje</button>
+        <br><br><button type="submit" class="button">Guardar personaje</button>
     </form>
 </div>
 

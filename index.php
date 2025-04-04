@@ -1,4 +1,5 @@
 <?php
+ob_start();
 require 'library/template/template.php';
 require 'library/components.php';
 Template::applyTemplate();
@@ -8,11 +9,14 @@ if (isset($_GET['delete'])) {
      $file = DATA_FOLDER . "{$id}.json";
      if (file_exists($file)) {
           if (unlink($file)) {
-               header("Location: index.php?success=1");
+               ob_end_clean();
+               header("Location: index.php?deleteSuccess=1");
           } else {
+               ob_end_clean();
                header("Location: index.php?error=1");
           }
      } else {
+          ob_end_clean();
           header("Location: index.php?error=2");
      }
      exit;
@@ -59,7 +63,7 @@ if (isset($_GET['delete'])) {
      </tbody>
 </table>
 
-<?php if (isset($_GET['success'])): ?>
+<?php if (isset($_GET['deleteSuccess'])): ?>
      <script>
           alert("Personaje eliminado correctamente!");
      </script>

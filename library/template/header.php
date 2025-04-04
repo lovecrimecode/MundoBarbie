@@ -144,6 +144,20 @@
 
                        padding: 0px;
                   }
+
+                  input {
+                       width: 100%;
+                       padding: 10px;
+                       margin: 5px 0;
+                       border-radius: 5px;
+                       border: 1px solid #ddd;
+                       font-size: 16px;
+                  }
+
+                  label {
+                       font-size: 20px;
+                       font-family: 'Pacifico';
+                  }
              </style>
         </head>
 
